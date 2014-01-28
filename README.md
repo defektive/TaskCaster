@@ -3,7 +3,7 @@
 This Google Cast demo application shows how to send messages from an Chrome desktop browser to a receiver using a custom namespace. 
 
 ## Dependencies
-* Chrome browser.
+* Chrome browser
 * Google Cast Extension: https://chrome.google.com/webstore/detail/google-cast/boadgeojelhgndaghljhdicfkmllpafd
 
 ## Setup Instructions
