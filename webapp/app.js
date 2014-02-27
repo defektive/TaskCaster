@@ -8,14 +8,14 @@
 		}])
 		.config(['$routeProvider', function ($routeProvider) {
 			$routeProvider
-				.when('/', {templateUrl: 'src/partials/home.html', controller: 'HomeCtrl'})
-				.otherwise({templateUrl: 'src/partials/404.html'});
+				.when('/', {templateUrl: 'webapp/partials/home.html', controller: 'HomeCtrl'})
+				.otherwise({templateUrl: 'webapp/partials/404.html'});
 
 			// Cycling routes
 			for (var i=0, l=CYCLE_ROUTES.length; i<l; i++) {
 				var route = CYCLE_ROUTES[i],
 					cased = route.substring(0, 1).toUpperCase() + route.substring(1);
-				$routeProvider.when('/' + route, {templateUrl: 'src/partials/' + route + '.html', controller: cased + 'Ctrl'});
+				$routeProvider.when('/' + route, {templateUrl: 'webapp/partials/' + route + '.html', controller: cased + 'Ctrl'});
 			}
 
 			var currentIndex = -1;
