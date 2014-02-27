@@ -1,6 +1,7 @@
 (function () {
 	var API_CONTEXT = 'https://hub.attask.com/attask/api-internal',
-		CYCLE_ROUTES = ['issues', 'iterations'];
+		reports = {},
+		data = {};
 
 	angular.module('TaskCaster', ['ui.bootstrap', 'ngRoute'])
 		.config(['$locationProvider', function ($locationProvider) {
@@ -9,29 +10,35 @@
 		.config(['$routeProvider', function ($routeProvider) {
 			$routeProvider
 				.when('/', {templateUrl: 'webapp/partials/home.html', controller: 'HomeCtrl'})
+				.when('/report/:reportID', {templateUrl: 'webapp/partials/report.html', controller: 'ReportCtrl'})
 				.otherwise({templateUrl: 'webapp/partials/404.html'});
-
-			// Cycling routes
-			for (var i=0, l=CYCLE_ROUTES.length; i<l; i++) {
-				var route = CYCLE_ROUTES[i],
-					cased = route.substring(0, 1).toUpperCase() + route.substring(1);
-				$routeProvider.when('/' + route, {templateUrl: 'webapp/partials/' + route + '.html', controller: cased + 'Ctrl'});
-			}
-
-			var currentIndex = -1;
-
-			setInterval(function () {
-				currentIndex++;
-				if (currentIndex >= CYCLE_ROUTES.length) {
-					currentIndex = 0;
-				}
-				window.location.hash = '/' + CYCLE_ROUTES[currentIndex];
-			}, 1000 * 60 * 5);
 		}])
-		.controller('HomeCtrl', function ($scope, $location, apiService) {
+		.run(function (apiService) {
+			// TODO: This works as far as loading data is concerned, but the scope for the route doesn't see the change and view isn't updated
+			apiService.get('dashboard/530f8b4e000bc00f1608a8243a508c10', 'fields=portalTabSections:internalSection:*,portalTabSections:internalSection:definition')
+				.success(function (result) {
+					console.log('run and done');
+					for (var i=0; i<result.data.portalTabSections.length; i++) {
+						var s = result.data.portalTabSections[i].internalSection,
+							p = s.definition.prompt[0];
+
+						reports[s.ID] = s;
+
+						apiService.search(s.uiObjCode, 'listOptions={reportID:"' + s.ID + '"}&filters={"' + p.valuefield + '":"ISIS"}')
+							.success(function (r) {
+								data[s.ID] = r.data.items;
+							});
+					}
+				});
+		})
+		.controller('HomeCtrl', function ($scope) {
+		})
+		.controller('ReportCtrl', function ($scope, $routeParams) {
+			var ID = $routeParams.reportID;
+			$scope.report = reports[ID];
 		})
 		.controller('IssuesCtrl', function ($scope, apiService) {
-			apiService.search('OPTASK', 'listOptions={reportID:%20%22530e6a6d000d3c71b57dba2baf4ee95e%22}&filters={%22team:name%22:%22ISIS%22}')
+			apiService.search('OPTASK', 'listOptions={reportID:"530e6a6d000d3c71b57dba2baf4ee95e"}&filters={"team:name":"ISIS"}')
 				.success(function (result) {
 					$scope.data = result.data;
 				});
@@ -39,11 +46,22 @@
 		.controller('IterationsCtrl', function ($scope, apiService) {
 		})
 		.factory('apiService', function ($http) {
+			function _request(path, query) {
+				var uri = API_CONTEXT + '/' + path + '?jsonp=JSON_CALLBACK&' + query;
+				//console.log(uri);
+				return $http.jsonp(uri);
+			}
+
 			function search(objCode, query) {
-				return $http.jsonp(API_CONTEXT + '/' + objCode + '/search?jsonp=JSON_CALLBACK&' + query);
+				return _request(objCode + '/search', query);
+			}
+
+			function get(path, query) {
+				return _request(path, query);
 			}
 
 			return {
+				get: get,
 				search: search
 			};
 		})
