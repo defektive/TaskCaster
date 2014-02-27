@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="TaskCaster">
   <head>
-
-    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/angular-route/angular-route.min.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-    <title>Cast Hello Text</title>
+    <title>TaskCaster</title>
   </head>
   <body>
-	<DIV id="message">Talk to me</DIV>
+	<div role="main" ng-view></div>
     <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+	<script src="src/app.js"></script>
     <script type="text/javascript">
 
 var namespace = 'urn:x-cast:com.attask.cast.dashboard';
