@@ -26,7 +26,7 @@
 					currentIndex = 0;
 				}
 				window.location.hash = '/' + CYCLE_ROUTES[currentIndex];
-			}, 5000);
+			}, 1000 * 60 * 5);
 		}])
 		.controller('HomeCtrl', function ($scope, $location, apiService) {
 		})
