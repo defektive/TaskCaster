@@ -1,11 +1,11 @@
 
 html {
-
-
+	background-color: #111113;
 	background-image: url(../img/logo.png), url(../img/bg.jpg);
 	background-position: center;
 	background-repeat: no-repeat;
-
+	box-shadow: inset 0 0 2500px 100px #000000;
+	height:100%;
 }
 
 h1 {
