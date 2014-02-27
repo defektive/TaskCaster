@@ -12,6 +12,17 @@ h1 {
 	color: #fff;
 }
 
+[ng-controller=CarouselDemoCtrl] {
+	width: 700px;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+}
+
+[ng-controller=CarouselDemoCtrl] .carousel-indicators {
+	display: none;
+}
+
 body {
 	overflow: hidden;
 	margin: 19px 30px 0px;
