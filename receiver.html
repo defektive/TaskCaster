@@ -1,21 +1,90 @@
 <!DOCTYPE html>
 <html ng-app="TaskCaster">
-  <head>
-    <script src="bower_components/angular/angular.min.js"></script>
-    <script src="bower_components/angular-route/angular-route.min.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
-    <title>TaskCaster</title>
-  </head>
-  <body>
+    <head>
+		<script src="bower_components/angular/angular.min.js"></script>
+		<script src="bower_components/angular-route/angular-route.min.js"></script>
+        <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+        <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+        <style>
+			body {
+				overflow:hidden;
+				overflow: hidden;
+				margin: 19px 30px 0px;
+				height: 683px;
+			}
+
+			div#message{
+				height:720PX;
+				width:1280PX;
+				text-align:center;
+				border:0px solid silver;
+				display: table-cell;
+				vertical-align:middle;
+				color:#FFFFFF;
+				background-color:#000000;
+				font-weight:bold;
+				font-family:Verdana, Geneva, sans-serif;
+				font-size:40px;
+			}
+        </style>
+        <script>
+
+
+			angular.module('plunker', ['ui.bootstrap']);
+			function CarouselDemoCtrl($scope) {
+				$scope.myInterval = 5000;
+				var slides = $scope.slides = [];
+				$scope.addSlide = function() {
+					var newWidth = 600 + slides.length;
+					slides.push({
+						image: 'http://placekitten.com/' + newWidth + '/300',
+						text: ['More','Extra','Lots of','Surplus'][slides.length % 4] + ' ' +
+						['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 4]
+					});
+				};
+				for (var i=0; i<4; i++) {
+					$scope.addSlide();
+				}
+			}
+
+		</script>
+		<title>TaskCaster</title>
+	</head>
+    <body>
+
+
+<!--<div ng-controller="CarouselDemoCtrl">-->
+  <!--<div style="height: 305px">-->
+    <!--<carousel interval="myInterval">-->
+      <!--<slide ng-repeat="slide in slides" active="slide.active">-->
+        <!--<img ng-src="{{slide.image}}" style="margin:auto;">-->
+        <!--<div class="carousel-caption">-->
+          <!--<h4>Slide {{$index}}</h4>-->
+          <!--<p>{{slide.text}}</p>-->
+        <!--</div>-->
+      <!--</slide>-->
+    <!--</carousel>-->
+  <!--</div>-->
+  <!--<div class="row">-->
+    <!--<div class="col-md-6">-->
+      <!--<a class="btn btn-info" ng-click="addSlide()">Add Slide</a>-->
+    <!--</div>-->
+    <!--<div class="col-md-6">-->
+      <!--Interval, in milliseconds: <input type="number" class="form-control" ng-model="myInterval">-->
+      <!--<br />Enter a negative number to stop the interval.-->
+    <!--</div>-->
+  <!--</div>-->
+<!--</div>-->
+
 	<div role="main" ng-view></div>
-    <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
 	<script src="src/app.js"></script>
     <script type="text/javascript">
 
 var namespace = 'urn:x-cast:com.attask.cast.dashboard';
 
-      window.onload = function() {
+      window.onlllload = function() {
+
+try {
         cast.receiver.logger.setLevelValue(0);
         window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
         console.log('Starting Receiver Manager');
@@ -63,6 +132,13 @@ var namespace = 'urn:x-cast:com.attask.cast.dashboard';
         // initialize the CastReceiverManager with an application status message
         window.castReceiverManager.start({statusText: "Application is starting"});
         console.log('Receiver Manager started');
+
+
+    } catch (e) {
+      console.log(e);
+    }
+
+
       };
       
       // utility function to display the text message in the input field
@@ -71,6 +147,7 @@ var namespace = 'urn:x-cast:com.attask.cast.dashboard';
         document.getElementById("message").innerHTML=text;
         window.castReceiverManager.setApplicationState(text);
       };
+
     </script>
   </body>
 </html>
