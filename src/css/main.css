@@ -1,0 +1,31 @@
+
+html {
+
+
+	background-image: url(../img/logo.png), url(../img/bg.jpg);
+	background-position: center;
+	background-repeat: no-repeat;
+
+}
+
+body {
+	overflow: hidden;
+	margin: 19px 30px 0px;
+	height: 683px;
+	background: none;
+	opacity: 0.8;
+}
+
+div#message{
+	height:720PX;
+	width:1280PX;
+	text-align:center;
+	border:0px solid silver;
+	display: table-cell;
+	vertical-align:middle;
+	color:#FFFFFF;
+	background-color:#000000;
+	font-weight:bold;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:40px;
+}

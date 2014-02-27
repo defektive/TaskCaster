@@ -4,34 +4,15 @@
 		<script src="bower_components/angular/angular.min.js"></script>
 		<script src="bower_components/angular-route/angular-route.min.js"></script>
 		<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-        <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
         <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
-	<script src="src/app.js"></script>
-        <style>
-			body {
-				overflow:hidden;
-				overflow: hidden;
-				margin: 19px 30px 0px;
-				height: 683px;
-			}
+		<script src="src/app.js"></script>
 
-			div#message{
-				height:720PX;
-				width:1280PX;
-				text-align:center;
-				border:0px solid silver;
-				display: table-cell;
-				vertical-align:middle;
-				color:#FFFFFF;
-				background-color:#000000;
-				font-weight:bold;
-				font-family:Verdana, Geneva, sans-serif;
-				font-size:40px;
-			}
-        </style>
+        <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+        <link href="src/css/main.css" rel="stylesheet">
+
 		<title>TaskCaster</title>
 	</head>
-    <body>
+<body>
 
 <div ng-controller="CarouselDemoCtrl">
   <div style="height: 305px">
@@ -59,66 +40,64 @@
 	<div role="main" ng-view></div>
     <script type="text/javascript">
 
-var namespace = 'urn:x-cast:com.attask.cast.dashboard';
+	var namespace = 'urn:x-cast:com.attask.cast.dashboard';
 
-      window.onload = function() {
+	window.onload = function() {
 
-try {
-        cast.receiver.logger.setLevelValue(0);
-        window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
-        console.log('Starting Receiver Manager');
-        
-        // handler for the 'ready' event
-        castReceiverManager.onReady = function(event) {
-          console.log('Received Ready event: ' + JSON.stringify(event.data));
-          window.castReceiverManager.setApplicationState("Application status is ready...");
-        };
-        
-        // handler for 'senderconnected' event
-        castReceiverManager.onSenderConnected = function(event) {
-          console.log('Received Sender Connected event: ' + event.data);
-          console.log(window.castReceiverManager.getSender(event.data).userAgent);
-        };
-        
-        // handler for 'senderdisconnected' event
-        castReceiverManager.onSenderDisconnected = function(event) {
-          console.log('Received Sender Disconnected event: ' + event.data);
-          if (window.castReceiverManager.getSenders().length == 0) {
-	        window.close();
-	      }
-        };
-        
-        // handler for 'systemvolumechanged' event
-        castReceiverManager.onSystemVolumeChanged = function(event) {
-          console.log('Received System Volume Changed event: ' + event.data['level'] + ' ' +
-              event.data['muted']);
-        };
+	try {
+	cast.receiver.logger.setLevelValue(0);
+	window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
+	console.log('Starting Receiver Manager');
 
-        // create a CastMessageBus to handle messages for a custom namespace
-        window.messageBus =
-          window.castReceiverManager.getCastMessageBus(namespace);
+	// handler for the 'ready' event
+	castReceiverManager.onReady = function(event) {
+	  console.log('Received Ready event: ' + JSON.stringify(event.data));
+	  window.castReceiverManager.setApplicationState("Application status is ready...");
+	};
 
-        // handler for the CastMessageBus message event
-        window.messageBus.onMessage = function(event) {
-          console.log('Message [' + event.senderId + ']: ' + event.data);
-          // display the message from the sender
-          displayText(event.data);
-          // inform all senders on the CastMessageBus of the incoming message event
-          // sender message listener will be invoked
-          window.messageBus.send(event.senderId, event.data);
-        }
+	// handler for 'senderconnected' event
+	castReceiverManager.onSenderConnected = function(event) {
+	  console.log('Received Sender Connected event: ' + event.data);
+	  console.log(window.castReceiverManager.getSender(event.data).userAgent);
+	};
 
-        // initialize the CastReceiverManager with an application status message
-        window.castReceiverManager.start({statusText: "Application is starting"});
-        console.log('Receiver Manager started');
+	// handler for 'senderdisconnected' event
+	castReceiverManager.onSenderDisconnected = function(event) {
+	  console.log('Received Sender Disconnected event: ' + event.data);
+	  if (window.castReceiverManager.getSenders().length == 0) {
+	    window.close();
+	  }
+	};
 
+	// handler for 'systemvolumechanged' event
+	castReceiverManager.onSystemVolumeChanged = function(event) {
+	  console.log('Received System Volume Changed event: ' + event.data['level'] + ' ' +
+	      event.data['muted']);
+	};
 
-    } catch (e) {
-      console.log(e);
-    }
+	// create a CastMessageBus to handle messages for a custom namespace
+	window.messageBus =
+	  window.castReceiverManager.getCastMessageBus(namespace);
+
+	// handler for the CastMessageBus message event
+	window.messageBus.onMessage = function(event) {
+	  console.log('Message [' + event.senderId + ']: ' + event.data);
+	  // display the message from the sender
+	  displayText(event.data);
+	  // inform all senders on the CastMessageBus of the incoming message event
+	  // sender message listener will be invoked
+	  window.messageBus.send(event.senderId, event.data);
+	}
+
+	// initialize the CastReceiverManager with an application status message
+	window.castReceiverManager.start({statusText: "Application is starting"});
+	console.log('Receiver Manager started');
 
 
-      };
+	} catch (e) {
+		console.log(e);
+	}
+	};
       
       // utility function to display the text message in the input field
       function displayText(text) {
