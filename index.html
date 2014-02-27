@@ -32,7 +32,7 @@ html, body, #wrapper {
 input {
   font-family: "Arial", Arial, sans-serif;
   font-size: 40px;
-  font-weight: bold;	
+  font-weight: bold;  
 }
 .border {
     border: 2px solid #cccccc;
@@ -47,7 +47,7 @@ input {
 <script type="text/javascript" src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
 <script type="text/javascript">
 var applicationID = '13881D1E';
-var namespace = 'urn:x-cast:com.google.cast.sample.helloworld';
+var namespace = 'urn:x-cast:com.attask.cast.dashboard';
 var session = null;
 
 /**
@@ -194,14 +194,14 @@ function transcribe(words) {
 </head>
 <body>
   <table id="wrapper">
-	<tr>
-		<td>
-			<form method="get" action="JavaScript:update();">
-				<input id="input" class="border" type="text" size="30" onwebkitspeechchange="transcribe(this.value)" x-webkit-speech/>
-			</form>
-		</td>
-	</tr>
-  </table>	
+  <tr>
+    <td>
+      <form method="get" action="JavaScript:update();">
+        <input id="input" class="border" type="text" size="30" onwebkitspeechchange="transcribe(this.value)" x-webkit-speech/>
+      </form>
+    </td>
+  </tr>
+  </table>  
 
   <!-- Debbugging output -->
   <div style="margin:10px; visibility:hidden;">
