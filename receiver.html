@@ -3,8 +3,10 @@
     <head>
 		<script src="bower_components/angular/angular.min.js"></script>
 		<script src="bower_components/angular-route/angular-route.min.js"></script>
+		<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
         <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
         <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+	<script src="src/app.js"></script>
         <style>
 			body {
 				overflow:hidden;
@@ -27,62 +29,39 @@
 				font-size:40px;
 			}
         </style>
-        <script>
-
-
-			angular.module('plunker', ['ui.bootstrap']);
-			function CarouselDemoCtrl($scope) {
-				$scope.myInterval = 5000;
-				var slides = $scope.slides = [];
-				$scope.addSlide = function() {
-					var newWidth = 600 + slides.length;
-					slides.push({
-						image: 'http://placekitten.com/' + newWidth + '/300',
-						text: ['More','Extra','Lots of','Surplus'][slides.length % 4] + ' ' +
-						['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 4]
-					});
-				};
-				for (var i=0; i<4; i++) {
-					$scope.addSlide();
-				}
-			}
-
-		</script>
 		<title>TaskCaster</title>
 	</head>
     <body>
 
-
-<!--<div ng-controller="CarouselDemoCtrl">-->
-  <!--<div style="height: 305px">-->
-    <!--<carousel interval="myInterval">-->
-      <!--<slide ng-repeat="slide in slides" active="slide.active">-->
-        <!--<img ng-src="{{slide.image}}" style="margin:auto;">-->
-        <!--<div class="carousel-caption">-->
-          <!--<h4>Slide {{$index}}</h4>-->
-          <!--<p>{{slide.text}}</p>-->
-        <!--</div>-->
-      <!--</slide>-->
-    <!--</carousel>-->
-  <!--</div>-->
-  <!--<div class="row">-->
-    <!--<div class="col-md-6">-->
-      <!--<a class="btn btn-info" ng-click="addSlide()">Add Slide</a>-->
-    <!--</div>-->
-    <!--<div class="col-md-6">-->
-      <!--Interval, in milliseconds: <input type="number" class="form-control" ng-model="myInterval">-->
-      <!--<br />Enter a negative number to stop the interval.-->
-    <!--</div>-->
-  <!--</div>-->
-<!--</div>-->
+<div ng-controller="CarouselDemoCtrl">
+  <div style="height: 305px">
+    <carousel interval="myInterval">
+      <slide ng-repeat="slide in slides" active="slide.active">
+        <img ng-src="{{slide.image}}" style="margin:auto;">
+        <div class="carousel-caption">
+          <h4>Slide {{$index}}</h4>
+          <p>{{slide.text}}</p>
+        </div>
+      </slide>
+    </carousel>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <a class="btn btn-info" ng-click="addSlide()">Add Slide</a>
+    </div>
+    <div class="col-md-6">
+      Interval, in milliseconds: <input type="number" class="form-control" ng-model="myInterval">
+      <br />Enter a negative number to stop the interval.
+    </div>
+  </div>
+</div>
 
 	<div role="main" ng-view></div>
-	<script src="src/app.js"></script>
     <script type="text/javascript">
 
 var namespace = 'urn:x-cast:com.attask.cast.dashboard';
 
-      window.onlllload = function() {
+      window.onlload = function() {
 
 try {
         cast.receiver.logger.setLevelValue(0);
