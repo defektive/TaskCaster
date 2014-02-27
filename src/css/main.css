@@ -8,6 +8,10 @@ html {
 
 }
 
+h1 {
+	color: #fff;
+}
+
 body {
 	overflow: hidden;
 	margin: 19px 30px 0px;
