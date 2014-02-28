@@ -5,7 +5,8 @@
 		REPORT_DELAY = 60, // How long the report is displayed in seconds
 		reportIDs = [],
 		reports = {},
-		data = {};
+		data = {},
+		apiKey;
 
 	angular.module('TaskCaster', ['ngRoute'])
 		.config(['$locationProvider', function ($locationProvider) {
@@ -21,13 +22,16 @@
 		.run(function (apiService, dashboardService, navService) {
 			navService.redirect('/loading');
 
-			var count = 0;
-			dashboardService.load(function (len) {
-				count++;
-				if (count === len) {
-					navService.redirect('/report/' + reportIDs[0]);
-				}
-			});
+			setTimeout(function (){
+				var count = 0;
+				console.log("Run report: " + apiKey)
+				dashboardService.load(function (len) {
+					count++;
+					if (count === len) {
+						navService.redirect('/report/' + reportIDs[0]);
+					}
+				})
+			}, 4000);
 		})
 		.controller('HomeCtrl', function ($scope) {
 		})
@@ -53,7 +57,7 @@
 		})
 		.factory('apiService', function ($http) {
 			function _request(path, query) {
-				var uri = API_CONTEXT + '/' + path + '?jsonp=JSON_CALLBACK&' + query;
+				var uri = API_CONTEXT + '/' + path + '?apiKey='+apiKey +'&jsonp=JSON_CALLBACK&' + query;
 				//console.log(uri);
 				return $http.jsonp(uri);
 			}
@@ -195,6 +199,10 @@
 						console.log('Message [' + event.senderId + ']: ' + event.data);
 						// display the message from the sender
 						displayText(event.data);
+
+						var data = JSON.parse(event.data);
+						processMessage(data);
+
 						// inform all senders on the CastMessageBus of the incoming message event
 						// sender message listener will be invoked
 						window.messageBus.send(event.senderId, event.data);
@@ -212,6 +220,12 @@
 		};
 	}
 	
+	function processMessage(data){
+		if(data.accessKey) {
+			console.log("set api key")
+			apiKey = data.accessKey;
+		}
+	}
   
 	// utility function to display the text message in the input field
 	function displayText(text) {
