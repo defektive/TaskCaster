@@ -52,6 +52,12 @@ div[role=main] th {
 	white-space: nowrap;
 }
 
+div[role=main] h1,
+div[role=main] th {
+	color: #ffa803;
+	text-shadow: 1px 1px 1px #000;
+}
+
 [ng-controller=CarouselDemoCtrl] {
 	width: 700px;
 	position: fixed;
