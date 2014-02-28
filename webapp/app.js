@@ -138,6 +138,25 @@
 			};
 		})
 
+		.filter('column', function () {
+			return function (col) {
+				var str = '',
+					i = col.length;
+
+				while (i--) {
+					str += i > 0 ? col.charAt(i) : col.charAt(i).toUpperCase();
+					if (col.charCodeAt(i) >= 65 &&
+						col.charCodeAt(i) <= 90) {
+						str += ' ';
+					}
+				}
+
+				str = str.split('').reverse().join('');
+
+				return str;
+			};
+		})
+
 		.directive('clock', function($interval, dateFilter) {
 
 			function link(scope, element, attrs) {
