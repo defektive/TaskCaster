@@ -1,4 +1,4 @@
-(function () {
+(function (window) {
 	var API_CONTEXT = 'https://hub.attask.com/attask/api-internal',
 		reports = {},
 		data = {};
@@ -10,14 +10,16 @@
 		.config(['$routeProvider', function ($routeProvider) {
 			$routeProvider
 				.when('/', {templateUrl: 'webapp/partials/home.html', controller: 'HomeCtrl'})
+				.when('/loading', {templateUrl: 'webapp/partials/loading.html'})
 				.when('/report/:reportID', {templateUrl: 'webapp/partials/report.html', controller: 'ReportCtrl'})
 				.otherwise({templateUrl: 'webapp/partials/404.html'});
 		}])
 		.run(function (apiService) {
 			// TODO: This works as far as loading data is concerned, but the scope for the route doesn't see the change and view isn't updated
+			window.location.hash = '/loading';
+
 			apiService.get('dashboard/530f8b4e000bc00f1608a8243a508c10', 'fields=portalTabSections:internalSection:*,portalTabSections:internalSection:definition')
 				.success(function (result) {
-					console.log('run and done');
 					for (var i=0; i<result.data.portalTabSections.length; i++) {
 						var s = result.data.portalTabSections[i].internalSection,
 							p = s.definition.prompt[0];
@@ -29,6 +31,8 @@
 								data[s.ID] = r.data.items;
 							});
 					}
+
+					window.location.hash = '/report/' + result.data.portalTabSections[0].internalSection.ID;
 				});
 		})
 		.controller('HomeCtrl', function ($scope) {
@@ -90,4 +94,4 @@
 					$scope.addSlide();
 				}
 			});
-})();
+})(window);
