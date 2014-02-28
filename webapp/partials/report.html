@@ -3,12 +3,12 @@
  <table class="table">
 	<thead>
 		<tr>
-			<th ng-repeat="col in columns">{{ col.valuefield | column }}</th>
+			<th ng-repeat="col in columns">{{ col.valuefield | columnName }}</th>
 		</tr>
 	</thead>
 	 <tbody>
 	 	<tr ng-repeat="item in data">
-			<td ng-repeat="col in columns">{{ item[col.valuefield] }}</td>
+			<td ng-repeat="col in columns">{{ item[col.valuefield] | columnValue:col }}</td>
 	 	</tr>
 	 </tbody>
 </table>

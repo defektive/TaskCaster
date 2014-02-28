@@ -138,8 +138,13 @@
 			};
 		})
 
-		.filter('column', function () {
+		.filter('columnName', function () {
 			return function (col) {
+				var idx = col.indexOf(':');
+				if (idx > -1) {
+					col = col.substring(0, idx);
+				}
+
 				var str = '',
 					i = col.length;
 
@@ -154,6 +159,11 @@
 				str = str.split('').reverse().join('');
 
 				return str;
+			};
+		})
+		.filter('columnValue', function () {
+			return function (val, col) {
+				return val;
 			};
 		})
 
