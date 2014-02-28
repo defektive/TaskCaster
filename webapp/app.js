@@ -2,16 +2,9 @@
 	var API_CONTEXT = 'https://hub.attask.com/attask/api-internal',
 		DASHBOARD_ID = '530f8b4e000bc00f1608a8243a508c10',
 		TEAM_ID = '4fe356dc000001934929cb1d2aa3f12b',
+		reportIDs = [],
 		reports = {},
 		data = {};
-
-	function getReportData(apiService, objCode, ID, valueField, callback) {
-		apiService.search(objCode, 'listOptions={reportID:"' + ID + '"}&filters={"' + valueField + '":"' + TEAM_ID + '"}')
-			.success(function (r) {
-				data[ID] = r.data.items;
-				callback();
-			});
-	}
 
 	angular.module('TaskCaster', ['ui.bootstrap', 'ngRoute'])
 		.config(['$locationProvider', function ($locationProvider) {
@@ -24,33 +17,16 @@
 				.when('/report/:reportID', {templateUrl: 'webapp/partials/report.html', controller: 'ReportCtrl'})
 				.otherwise({templateUrl: 'webapp/partials/404.html'});
 		}])
-		.run(function (apiService) {
-			// TODO: This is a bit of a hack for a loading screen
+		.run(function (apiService, dashboardService) {
 			window.location.hash = '/loading';
 
-			// Get the dashboard
-			apiService.get('dashboard/' + DASHBOARD_ID, 'fields=portalTabSections:internalSection:*,portalTabSections:internalSection:definition')
-				.success(function (result) {
-					var l = result.data.portalTabSections.length,
-						count = 0;
-
-					// Called every time report data comes back from server, used to track response count and load result screen
-					function callback() {
-						count++;
-						if (count === l) {
-							window.location.hash = '/report/' + result.data.portalTabSections[0].internalSection.ID;
-						}
-					}
-
-					// Get data for each report in the dashboard
-					for (var i=0; i<l; i++) {
-						var s = result.data.portalTabSections[i].internalSection,
-							p = s.definition.prompt[0];
-
-						reports[s.ID] = s;
-						getReportData(apiService, s.uiObjCode, s.ID, p.valuefield, callback);
-					}
-				});
+			var count = 0;
+			dashboardService.dashboard(function (len) {
+				count++;
+				if (count === len) {
+					window.location.hash = '/report/' + reportIDs[0];
+				}
+			});
 		})
 		.controller('HomeCtrl', function ($scope) {
 		})
@@ -85,6 +61,39 @@
 			return {
 				get: get,
 				search: search
+			};
+		})
+		.factory('dashboardService', function (apiService) {
+			function getReportData(objCode, ID, valueField, callback) {
+				apiService.search(objCode, 'listOptions={reportID:"' + ID + '"}&filters={"' + valueField + '":"' + TEAM_ID + '"}')
+					.success(function (r) {
+						data[ID] = r.data.items;
+						callback();
+					});
+			}
+
+			function getDashboardData(callback) {
+				apiService.get('dashboard/' + DASHBOARD_ID, 'fields=portalTabSections:internalSection:*,portalTabSections:internalSection:definition')
+					.success(function (result) {
+						var l = result.data.portalTabSections.length;
+
+						// Get data for each report in the dashboard
+						for (var i=0; i<l; i++) {
+							var s = result.data.portalTabSections[i].internalSection,
+								p = s.definition.prompt[0];
+
+							reports[s.ID] = s;
+							reportIDs.push(s.ID);
+							getReportData(s.uiObjCode, s.ID, p.valuefield, function () {
+								callback.call(null, l);
+							});
+						}
+					});
+			}
+
+			return {
+				dashboard: getDashboardData,
+				report: getReportData
 			};
 		})
 		.controller('CarouselDemoCtrl', function ($scope) {
