@@ -1,8 +1,9 @@
 (function (window) {
-	var API_CONTEXT = 'https://hub.attask.com/attask/api-internal',
+	var WEBAPP_URL = 'https://hub.attask.com',
+		API_CONTEXT = WEBAPP_URL + '/attask/api-internal',
 		DASHBOARD_ID = '530f8b4e000bc00f1608a8243a508c10',
 		TEAM_ID = '4fe356dc000001934929cb1d2aa3f12b',
-		REPORT_DELAY = 8, // How long the report is displayed in seconds
+		REPORT_DELAY = 3, // How long the report is displayed in seconds
 		reportIDs = [],
 		reports = {},
 		data = {},
@@ -154,11 +155,11 @@
 			var REGEX_DATE = /^(\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2})/;
 
 			return function (val) {
-				var match = null;
+				var match;
+
 				if ((match = String(val).match(REGEX_DATE)) != null) {
 					val = $filter('date')(Date.parse(match[0]), 'shortDate');
 				}
-
 
 				return val;
 			};

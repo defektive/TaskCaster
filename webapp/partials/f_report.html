@@ -8,7 +8,16 @@
 	</thead>
 	 <tbody>
 	 	<tr ng-repeat="item in data">
-			<td ng-repeat="col in columns">{{ item[col.valuefield] | columnValue }}</td>
+			<td ng-repeat="col in columns">
+				<span ng-switch on="col.valuefield">
+					<span ng-switch-when="avatar">
+						<img src="https://hub.attask.com{{ item.avatarDownloadURL }}&size=SMALL"/>
+					</span>
+					<span ng-switch-default>
+						{{ item[col.valuefield] | columnValue }}
+					</span>
+				</span>
+			</td>
 	 	</tr>
 	 </tbody>
 </table>
