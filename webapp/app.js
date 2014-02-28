@@ -246,8 +246,13 @@
 						window.messageBus.send(event.senderId, event.data);
 					}
 
+					var appConfig = new cast.receiver.CastReceiverManager.Config();
+					appConfig.statusText = 'Starting up AtCast';
+					appConfig.maxInactivity = 9000000000; // 10 minutes for testing, use default 10sec in prod by not setting this value
+
+
 					// initialize the CastReceiverManager with an application status message
-					window.castReceiverManager.start({statusText: "Application is starting"});
+					window.castReceiverManager.start(appConfig);
 					console.log('Receiver Manager started');
 
 
