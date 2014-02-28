@@ -43,6 +43,13 @@
 			var ID = $routeParams.reportID;
 			$scope.report = reports[ID];
 			$scope.data = data[ID];
+			$scope.columns = [];
+
+			for (var i=0, c=$scope.report.view.definition.column, l=c.length; i<l; i++) {
+				if (c[i].shortview === 'true') {
+					$scope.columns.push(c[i]);
+				}
+			}
 
 			// Update the report being displayed on a timer
 			setTimeout(function () {
