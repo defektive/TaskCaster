@@ -27,7 +27,6 @@
 		.run(function (apiService) {
 			// TODO: This is a bit of a hack for a loading screen
 			window.location.hash = '/loading';
-return;
 			// Get the dashboard
 			apiService.get('dashboard/' + DASHBOARD_ID, 'fields=portalTabSections:internalSection:*,portalTabSections:internalSection:definition')
 				.success(function (result) {
