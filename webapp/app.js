@@ -17,7 +17,7 @@
 				.when('/', {templateUrl: 'webapp/partials/home.html', controller: 'HomeCtrl'})
 				.when('/loading', {templateUrl: 'webapp/partials/loading.html'})
 				.when('/error/:message', {templateUrl: 'webapp/partials/error.html', controller: 'ErrorCtrl'})
-				.when('/report/:reportID', {templateUrl: 'webapp/partials/report.html', controller: 'ReportCtrl'})
+				.when('/report/:reportID', {templateUrl: 'webapp/partials/report.html?fuck', controller: 'ReportCtrl'})
 				.otherwise({templateUrl: 'webapp/partials/404.html'});
 		}])
 		.run(function (apiService, dashboardService, navService) {
