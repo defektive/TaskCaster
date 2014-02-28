@@ -14,7 +14,6 @@
 		}])
 		.config(['$routeProvider', function ($routeProvider) {
 			$routeProvider
-				.when('/', {templateUrl: 'webapp/partials/home.html', controller: 'HomeCtrl'})
 				.when('/loading', {templateUrl: 'webapp/partials/loading.html'})
 				.when('/error/:message', {templateUrl: 'webapp/partials/error.html', controller: 'ErrorCtrl'})
 				.when('/report/:reportID', {templateUrl: 'webapp/partials/f_report.html', controller: 'ReportCtrl'})
@@ -33,8 +32,6 @@
 					}
 				})
 			}, 4000);
-		})
-		.controller('HomeCtrl', function ($scope) {
 		})
 		.controller('ErrorCtrl', function ($scope, $routeParams) {
 			$scope.message = $routeParams.message;
@@ -57,14 +54,6 @@
 				index = (index + 1 >= reportIDs.length) ? 0 : index + 1;
 				navService.redirect('/report/' + reportIDs[index]);
 			}, 1000 * REPORT_DELAY);
-		})
-		.controller('IssuesCtrl', function ($scope, apiService) {
-			apiService.search('OPTASK', 'listOptions={reportID:"530e6a6d000d3c71b57dba2baf4ee95e"}&filters={"team:name":"ISIS"}')
-				.success(function (result) {
-					$scope.data = result.data;
-				});
-		})
-		.controller('IterationsCtrl', function ($scope, apiService) {
 		})
 		.factory('apiService', function ($http) {
 			function _request(path, query) {
@@ -138,8 +127,13 @@
 			};
 		})
 
-		.filter('column', function () {
+		.filter('columnName', function () {
 			return function (col) {
+				var idx = col.indexOf(':');
+				if (idx > -1) {
+					col = col.substring(0, idx);
+				}
+
 				var str = '',
 					i = col.length;
 
@@ -154,6 +148,19 @@
 				str = str.split('').reverse().join('');
 
 				return str;
+			};
+		})
+		.filter('columnValue', function ($filter) {
+			var REGEX_DATE = /^(\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2})/;
+
+			return function (val) {
+				var match = null;
+				if ((match = String(val).match(REGEX_DATE)) != null) {
+					val = $filter('date')(Date.parse(match[0]), 'shortDate');
+				}
+
+
+				return val;
 			};
 		})
 
