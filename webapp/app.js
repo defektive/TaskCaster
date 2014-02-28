@@ -15,6 +15,7 @@
 			$routeProvider
 				.when('/', {templateUrl: 'webapp/partials/home.html', controller: 'HomeCtrl'})
 				.when('/loading', {templateUrl: 'webapp/partials/loading.html'})
+				.when('/error/:message', {templateUrl: 'webapp/partials/error.html', controller: 'ErrorCtrl'})
 				.when('/report/:reportID', {templateUrl: 'webapp/partials/report.html', controller: 'ReportCtrl'})
 				.otherwise({templateUrl: 'webapp/partials/404.html'});
 		}])
@@ -30,6 +31,9 @@
 			});
 		})
 		.controller('HomeCtrl', function ($scope) {
+		})
+		.controller('ErrorCtrl', function ($scope, $routeParams) {
+			$scope.message = $routeParams.message;
 		})
 		.controller('ReportCtrl', function ($scope, $routeParams, navService) {
 			var ID = $routeParams.reportID;
@@ -71,18 +75,26 @@
 				search: search
 			};
 		})
-		.factory('dashboardService', function (apiService) {
+		.factory('dashboardService', function (apiService, navService) {
 			function getReportData(objCode, ID, valueField, callback) {
 				apiService.search(objCode, 'listOptions={reportID:"' + ID + '"}&filters={"' + valueField + '":"' + TEAM_ID + '"}')
-					.success(function (r) {
-						data[ID] = r.data.items;
+					.success(function (result) {
+						if (result.error) {
+							navService.redirect('/error/' + result.error.message);
+						}
+
+						data[ID] = result.data.items;
 						callback();
 					});
 			}
 
 			function getDashboardData(callback) {
-				apiService.get('dashboard/' + DASHBOARD_ID, 'fields=portalTabSections:internalSection:*,portalTabSections:internalSection:definition')
+				apiService.get('dashboard/' + DASHBOARD_ID, 'fields=portalTabSections:internalSection:*,portalTabSections:internalSection:definition,portalTabSections:internalSection:view:definition')
 					.success(function (result) {
+						if (result.error) {
+							navService.redirect('/error/' + result.error.message);
+						}
+
 						var l = result.data.portalTabSections.length;
 
 						// Get data for each report in the dashboard
