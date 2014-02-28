@@ -32,11 +32,11 @@ div[role=main] {
 	overflow: hidden;
 }
 
-h1 {
+div[role=main] h1 {
 	margin-top: 0;
 }
 
-table {
+div[role=main] table {
 	background: rgba(255, 255, 255, .1);
 	color: #999;
 	position: absolute;
@@ -45,6 +45,11 @@ table {
 	bottom: 0;
 	left: 0;
 	height: 100%;
+}
+
+div[role=main] th {
+	min-width: 100px;
+	white-space: nowrap;
 }
 
 [ng-controller=CarouselDemoCtrl] {
