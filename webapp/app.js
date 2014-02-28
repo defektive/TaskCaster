@@ -17,23 +17,30 @@
 				.when('/report/:reportID', {templateUrl: 'webapp/partials/report.html', controller: 'ReportCtrl'})
 				.otherwise({templateUrl: 'webapp/partials/404.html'});
 		}])
-		.run(function (apiService, dashboardService) {
-			window.location.hash = '/loading';
+		.run(function (apiService, dashboardService, navService) {
+			navService.redirect('/loading');
 
 			var count = 0;
 			dashboardService.dashboard(function (len) {
 				count++;
 				if (count === len) {
-					window.location.hash = '/report/' + reportIDs[0];
+					navService.redirect('/report/' + reportIDs[0]);
 				}
 			});
 		})
 		.controller('HomeCtrl', function ($scope) {
 		})
-		.controller('ReportCtrl', function ($scope, $routeParams) {
+		.controller('ReportCtrl', function ($scope, $routeParams, navService) {
 			var ID = $routeParams.reportID;
 			$scope.report = reports[ID];
 			$scope.data = data[ID];
+
+			// Update the report being displayed on a timer
+			setTimeout(function () {
+				var index = reportIDs.indexOf(ID);
+				index = (index + 1 >= reportIDs.length) ? 0 : index + 1;
+				navService.redirect('/report/' + reportIDs[index]);
+			}, 1000 * 60);
 		})
 		.controller('IssuesCtrl', function ($scope, apiService) {
 			apiService.search('OPTASK', 'listOptions={reportID:"530e6a6d000d3c71b57dba2baf4ee95e"}&filters={"team:name":"ISIS"}')
@@ -94,6 +101,13 @@
 			return {
 				dashboard: getDashboardData,
 				report: getReportData
+			};
+		})
+		.factory('navService', function () {
+			return {
+				redirect: function (location) {
+					window.location.hash = location;
+				}
 			};
 		})
 
