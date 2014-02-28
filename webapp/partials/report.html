@@ -1,5 +1,40 @@
 <h1>{{ report.name }}</h1>
 
-<ul>
-	<li ng-repeat="item in data">{{ item.name }}</li>
-</ul>
+ <table ng-if="report.uiObjCode === 'OPTASK'" class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+		</tr>
+	</thead>
+	 <tbody>
+	 	<tr ng-repeat="item in data">
+			<td>{{ item.name }}</td>
+	 	</tr>
+	 </tbody>
+</table>
+
+<table ng-if="report.uiObjCode === 'NOTE'" class="table">
+	<thead>
+		<tr>
+			<th>Note</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="item in data">
+			<td>{{ item.noteText }}</td>
+		</tr>
+	</tbody>
+</table>
+
+<table ng-if="report.uiObjCode === 'USER'" class="table">
+	<thead>
+		<tr>
+			<th>Name</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="item in data">
+			<td><img src="http://hub.attask.com{{ item.avatarDownloadURL }}&size=SMALL"/> {{ item.name }}</td>
+		</tr>
+	</tbody>
+</table>
