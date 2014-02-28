@@ -8,7 +8,7 @@
 	</thead>
 	 <tbody>
 	 	<tr ng-repeat="item in data">
-			<td ng-repeat="col in columns">{{ item[col.valuefield] | columnValue:col }}</td>
+			<td ng-repeat="col in columns">{{ item[col.valuefield] | columnValue }}</td>
 	 	</tr>
 	 </tbody>
 </table>
