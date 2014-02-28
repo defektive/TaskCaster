@@ -6,7 +6,7 @@
 		reports = {},
 		data = {};
 
-	angular.module('TaskCaster', ['ui.bootstrap', 'ngRoute'])
+	angular.module('TaskCaster', ['ngRoute'])
 		.config(['$locationProvider', function ($locationProvider) {
 			$locationProvider.html5Mode(false);
 		}])
@@ -96,29 +96,109 @@
 				report: getReportData
 			};
 		})
-		.controller('CarouselDemoCtrl', function ($scope) {
-				$scope.myInterval = 5000;
-				var slides = $scope.slides = [];
-				function getPrefix() {
-					return Math.floor(Math.random()) ? 
-						"http://placekitten.com/" :
-						"http://lorempixel.com/g/";
 
+		.directive('clock', function($interval, dateFilter) {
+
+			function link(scope, element, attrs) {
+				var format,
+				timeoutId;
+				
+				scope.time = new Date();
+
+
+
+				function updateTime() {
+					scope.time = new Date;
+					scope.$digest();
+					setTimeout(updateTime, 1000);
 				}
 
-				$scope.addSlide = function() {
-					var newWidth = 600 + slides.length;
+				window.addEventListener("load", function (){
+					setTimeout (function (){
+						updateTime();
+					}, 10000);
+				});
+			}
+
+			return {
+				restrict: "E",
+				link: link,
+				template: "{{ time | date:'h:mm' }}"
+			};
+		});
 
 
+	var namespace = 'urn:x-cast:com.attask.cast.dashboard';
+	if (window.location.host == "googledrive.com") {
+		var script = document.createElement("script");
+			script.setAttribute("type", "text/javascript");
+			script.setAttribute("src", "//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js");
+		document.head.appendChild(script);
 
-					slides.push({
-						image: getPrefix() + newWidth + '/300',
-						text: ['More','Extra','Lots of','Surplus'][slides.length % 4] + ' ' +
-						['Cats', 'Kittys', 'Felines', 'Cutes'][slides.length % 4]
-					});
-				};
-				for (var i=0; i<81; i++) {
-					$scope.addSlide();
+		window.onload = function() {
+			setTimeout(function (){
+
+				try {
+					cast.receiver.logger.setLevelValue(0);
+					window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
+					console.log('Starting Receiver Manager');
+
+					// handler for the 'ready' event
+					castReceiverManager.onReady = function(event) {
+						console.log('Received Ready event: ' + JSON.stringify(event.data));
+						window.castReceiverManager.setApplicationState("Application status is ready...");
+					};
+
+					// handler for 'senderconnected' event
+					castReceiverManager.onSenderConnected = function(event) {
+						console.log('Received Sender Connected event: ' + event.data);
+						console.log(window.castReceiverManager.getSender(event.data).userAgent);
+					};
+
+					// handler for 'senderdisconnected' event
+					castReceiverManager.onSenderDisconnected = function(event) {
+						console.log('Received Sender Disconnected event: ' + event.data);
+						if (window.castReceiverManager.getSenders().length == 0) {
+							window.close();
+						}
+					};
+
+					// handler for 'systemvolumechanged' event
+					castReceiverManager.onSystemVolumeChanged = function(event) {
+						console.log('Received System Volume Changed event: ' + event.data['level'] + ' ' +
+						event.data['muted']);
+					};
+
+					// create a CastMessageBus to handle messages for a custom namespace
+					window.messageBus = window.castReceiverManager.getCastMessageBus(namespace);
+
+					// handler for the CastMessageBus message event
+					window.messageBus.onMessage = function(event) {
+						console.log('Message [' + event.senderId + ']: ' + event.data);
+						// display the message from the sender
+						displayText(event.data);
+						// inform all senders on the CastMessageBus of the incoming message event
+						// sender message listener will be invoked
+						window.messageBus.send(event.senderId, event.data);
+					}
+
+					// initialize the CastReceiverManager with an application status message
+					window.castReceiverManager.start({statusText: "Application is starting"});
+					console.log('Receiver Manager started');
+
+
+				} catch (e) {
+					console.log(e);
 				}
-			});
+			}, 0);
+		};
+	}
+	
+  
+	// utility function to display the text message in the input field
+	function displayText(text) {
+		console.log(text);
+		document.getElementById("message").innerHTML=text;
+		window.castReceiverManager.setApplicationState(text);
+	};
 })(window);

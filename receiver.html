@@ -1,96 +1,30 @@
 <!DOCTYPE html>
 <html ng-app="TaskCaster">
     <head>
-		<script src="bower_components/angular/angular.min.js"></script>
-		<script src="bower_components/angular-route/angular-route.min.js"></script>
-		<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-        <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
-		<script src="webapp/app.js"></script>
         <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
         <link href="webapp/css/main.css" rel="stylesheet">
+        <link href="webapp/css/dubstep.css" rel="stylesheet">
 		<title>TaskCaster</title>
 	</head>
-<body>
+	<body>
+		<div role="main" ng-view></div>
 
-<!--<div ng-controller="CarouselDemoCtrl">-->
-  <!--<div style="height: 305px">-->
-    <!--<carousel interval="myInterval">-->
-      <!--<slide ng-repeat="slide in slides" active="slide.active">-->
-        <!--<img ng-src="{{slide.image}}" style="margin:auto;">-->
-      <!--</slide>-->
-    <!--</carousel>-->
-  <!--</div>-->
-<!--</div>-->
+		<clock></clock>
 
-	<div role="main" ng-view></div>
-    <script type="text/javascript">
+		<div class="dashboard-info">
+			<img src="webapp/img/cast_on.png"/>
+			<div class="text">
+				<div class="title">ISIS Team Dashboard</div>
+				<div class="sub-title">
+ 					<div class="icon-attask"></div>
+ 					<span id="message"></span>
+				</div>
+			</div>
+		</div>
 
-	var namespace = 'urn:x-cast:com.attask.cast.dashboard';
-
-	window.onload = function() {
-
-	try {
-	cast.receiver.logger.setLevelValue(0);
-	window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
-	console.log('Starting Receiver Manager');
-
-	// handler for the 'ready' event
-	castReceiverManager.onReady = function(event) {
-	  console.log('Received Ready event: ' + JSON.stringify(event.data));
-	  window.castReceiverManager.setApplicationState("Application status is ready...");
-	};
-
-	// handler for 'senderconnected' event
-	castReceiverManager.onSenderConnected = function(event) {
-	  console.log('Received Sender Connected event: ' + event.data);
-	  console.log(window.castReceiverManager.getSender(event.data).userAgent);
-	};
-
-	// handler for 'senderdisconnected' event
-	castReceiverManager.onSenderDisconnected = function(event) {
-	  console.log('Received Sender Disconnected event: ' + event.data);
-	  if (window.castReceiverManager.getSenders().length == 0) {
-	    window.close();
-	  }
-	};
-
-	// handler for 'systemvolumechanged' event
-	castReceiverManager.onSystemVolumeChanged = function(event) {
-	  console.log('Received System Volume Changed event: ' + event.data['level'] + ' ' +
-	      event.data['muted']);
-	};
-
-	// create a CastMessageBus to handle messages for a custom namespace
-	window.messageBus =
-	  window.castReceiverManager.getCastMessageBus(namespace);
-
-	// handler for the CastMessageBus message event
-	window.messageBus.onMessage = function(event) {
-	  console.log('Message [' + event.senderId + ']: ' + event.data);
-	  // display the message from the sender
-	  displayText(event.data);
-	  // inform all senders on the CastMessageBus of the incoming message event
-	  // sender message listener will be invoked
-	  window.messageBus.send(event.senderId, event.data);
-	}
-
-	// initialize the CastReceiverManager with an application status message
-	window.castReceiverManager.start({statusText: "Application is starting"});
-	console.log('Receiver Manager started');
-
-
-	} catch (e) {
-		console.log(e);
-	}
-	};
-      
-      // utility function to display the text message in the input field
-      function displayText(text) {
-        console.log(text);
-        document.getElementById("message").innerHTML=text;
-        window.castReceiverManager.setApplicationState(text);
-      };
-
-    </script>
-  </body>
+		<script src="bower_components/angular/angular.js"></script>
+		<script src="bower_components/angular-route/angular-route.js"></script>
+		<!--<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>-->
+		<script src="webapp/app.js"></script>
+	</body>
 </html>

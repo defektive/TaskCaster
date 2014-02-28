@@ -1,0 +1,72 @@
+@font-face {
+  font-family: 'dubstep';
+  src: url('../font/dubstep.eot?52312811');
+  src: url('../font/dubstep.eot?52312811#iefix') format('embedded-opentype'),
+       url('../font/dubstep.woff?52312811') format('woff'),
+       url('../font/dubstep.ttf?52312811') format('truetype'),
+       url('../font/dubstep.svg?52312811#dubstep') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'dubstep';
+    src: url('../font/dubstep.svg?52312811#dubstep') format('svg');
+  }
+}
+*/
+ 
+ [class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "dubstep";
+  font-style: normal;
+  font-weight: normal;
+  speak: none;
+ 
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: .2em;
+  text-align: center;
+  /* opacity: .8; */
+ 
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+     
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+ 
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: .2em;
+ 
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+ 
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+ 
+.icon-attask:before { content: '\e80f'; } /* '' */
+.icon-tasks:before { content: '\e808'; } /* '' */
+.icon-star:before { content: '\e80a'; } /* '' */
+.icon-star-empty:before { content: '\e80b'; } /* '' */
+.icon-user:before { content: '\e800'; } /* '' */
+.icon-users:before { content: '\e806'; } /* '' */
+.icon-plus:before { content: '\e807'; } /* '' */
+.icon-help:before { content: '\e810'; } /* '' */
+.icon-pencil:before { content: '\e80d'; } /* '' */
+.icon-doc:before { content: '\e804'; } /* '' */
+.icon-search:before { content: '\e801'; } /* '' */
+.icon-cog:before { content: '\e80c'; } /* '' */
+.icon-calendar:before { content: '\e802'; } /* '' */
+.icon-left-open:before { content: '\e812'; } /* '' */
+.icon-right-open:before { content: '\e813'; } /* '' */
+.icon-list:before { content: '\e805'; } /* '' */
+.icon-suitcase:before { content: '\e803'; } /* '' */
+.icon-chart-bar:before { content: '\e809'; } /* '' */
+.icon-bug:before { content: '\e80e'; } /* '' */
+.icon-menu:before { content: '\e811'; } /* '' */
