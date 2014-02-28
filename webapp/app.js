@@ -2,6 +2,7 @@
 	var API_CONTEXT = 'https://hub.attask.com/attask/api-internal',
 		DASHBOARD_ID = '530f8b4e000bc00f1608a8243a508c10',
 		TEAM_ID = '4fe356dc000001934929cb1d2aa3f12b',
+		REPORT_DELAY = 60, // How long the report is displayed in seconds
 		reportIDs = [],
 		reports = {},
 		data = {};
@@ -21,7 +22,7 @@
 			navService.redirect('/loading');
 
 			var count = 0;
-			dashboardService.dashboard(function (len) {
+			dashboardService.load(function (len) {
 				count++;
 				if (count === len) {
 					navService.redirect('/report/' + reportIDs[0]);
@@ -40,7 +41,7 @@
 				var index = reportIDs.indexOf(ID);
 				index = (index + 1 >= reportIDs.length) ? 0 : index + 1;
 				navService.redirect('/report/' + reportIDs[index]);
-			}, 1000 * 60);
+			}, 1000 * REPORT_DELAY);
 		})
 		.controller('IssuesCtrl', function ($scope, apiService) {
 			apiService.search('OPTASK', 'listOptions={reportID:"530e6a6d000d3c71b57dba2baf4ee95e"}&filters={"team:name":"ISIS"}')
@@ -92,15 +93,18 @@
 							reports[s.ID] = s;
 							reportIDs.push(s.ID);
 							getReportData(s.uiObjCode, s.ID, p.valuefield, function () {
-								callback.call(null, l);
+								if (typeof callback === 'function') {
+									callback.call(null, l);
+								}
 							});
 						}
 					});
 			}
 
 			return {
-				dashboard: getDashboardData,
-				report: getReportData
+				load: function (callback) {
+					getDashboardData.call(null, callback);
+				}
 			};
 		})
 		.factory('navService', function () {
