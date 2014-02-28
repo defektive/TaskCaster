@@ -2,7 +2,7 @@
 	var API_CONTEXT = 'https://hub.attask.com/attask/api-internal',
 		DASHBOARD_ID = '530f8b4e000bc00f1608a8243a508c10',
 		TEAM_ID = '4fe356dc000001934929cb1d2aa3f12b',
-		REPORT_DELAY = 60, // How long the report is displayed in seconds
+		REPORT_DELAY = 8, // How long the report is displayed in seconds
 		reportIDs = [],
 		reports = {},
 		data = {},
