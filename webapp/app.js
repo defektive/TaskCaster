@@ -3,7 +3,7 @@
 		API_CONTEXT = WEBAPP_URL + '/attask/api-internal',
 		DASHBOARD_ID = '530f8b4e000bc00f1608a8243a508c10',
 		TEAM_ID = '4fe356dc000001934929cb1d2aa3f12b',
-		REPORT_DELAY = 3, // How long the report is displayed in seconds
+		REPORT_DELAY = 10, // How long the report is displayed in seconds
 		reportIDs = [],
 		reports = {},
 		data = {},
@@ -25,7 +25,6 @@
 
 			setTimeout(function (){
 				var count = 0;
-				console.log("Run report: " + apiKey)
 				dashboardService.load(function (len) {
 					count++;
 					if (count === len) {
