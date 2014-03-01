@@ -28,7 +28,11 @@
 				dashboardService.load(function (len) {
 					count++;
 					if (count === len) {
-						navService.redirect('/report/' + reportIDs[0]);
+						$("html").addClass("loaded");
+
+						setTimeout(function (){
+							navService.redirect('/report/' + reportIDs[0]);
+						}, 300);
 					}
 				})
 			}, 4000);

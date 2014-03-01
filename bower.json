@@ -15,8 +15,11 @@
     "tests"
   ],
   "dependencies": {
-	"angular-route": "~1.2.14",
+    "angular-route": "~1.2.14",
     "angular-bootstrap": "~0.10.0",
     "bootstrap": "3.0.3"
+  },
+  "devDependencies": {
+    "jquery": "~2.1.0"
   }
 }
