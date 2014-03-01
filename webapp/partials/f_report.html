@@ -11,7 +11,7 @@
 			<td ng-repeat="col in columns">
 				<span ng-switch on="col.valuefield">
 					<span ng-switch-when="avatar">
-						<img src="https://hub.attask.com{{ item.avatarDownloadURL }}"/>
+						<img src="https://hub.attask.com{{ item.avatarDownloadURL }}&size=LARGE"/>
 					</span>
 					<span ng-switch-default>
 						{{ item[col.valuefield] | columnValue }}
