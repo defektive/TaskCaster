@@ -40,7 +40,7 @@
 		.controller('ErrorCtrl', function ($scope, $routeParams) {
 			$scope.message = $routeParams.message;
 		})
-		.controller('ReportCtrl', function ($scope, $routeParams, navService) {
+		.controller('ReportCtrl', function ($scope, $routeParams, navService, dashboardService) {
 			var ID = $routeParams.reportID;
 			$scope.report = reports[ID];
 			$scope.data = data[ID];
@@ -57,6 +57,13 @@
 				var index = reportIDs.indexOf(ID);
 				index = (index + 1 >= reportIDs.length) ? 0 : index + 1;
 				navService.redirect('/report/' + reportIDs[index]);
+
+				// Reload data after each full rotation
+				if (index === reportIDs.length - 1) {
+					setTimeout(function () {
+						dashboardService.load();
+					}, 0);
+				}
 			}, 1000 * REPORT_DELAY);
 		})
 		.factory('apiService', function ($http) {
@@ -119,6 +126,7 @@
 
 			return {
 				load: function (callback) {
+					reportIDs = [];
 					getDashboardData.call(null, callback);
 				}
 			};
@@ -168,7 +176,12 @@
 				else if (field.indexOf(':') > -1) {
 					var parts = field.split(':');
 					for (var i=0, l=parts.length; i<l; i++) {
-						obj = obj[parts[i]];
+						if (obj[parts[i]] != null) {
+							obj = obj[parts[i]];
+						} else {
+							obj = '';
+							break;
+						}
 					}
 					val = obj;
 				}
