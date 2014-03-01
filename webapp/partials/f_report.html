@@ -14,7 +14,7 @@
 						<img src="https://hub.attask.com{{ item.avatarDownloadURL }}&size=LARGE"/>
 					</span>
 					<span ng-switch-default>
-						{{ item[col.valuefield] | columnValue }}
+						{{ item[col.valuefield] | columnValue:item:col.valuefield }}
 					</span>
 				</span>
 			</td>

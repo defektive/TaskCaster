@@ -157,11 +157,20 @@
 		.filter('columnValue', function ($filter) {
 			var REGEX_DATE = /^(\d{4}\-\d{2}\-\d{2}T\d{2}:\d{2}:\d{2})/;
 
-			return function (val) {
+			return function (val, obj, field) {
 				var match;
 
+				// Format date value
 				if ((match = String(val).match(REGEX_DATE)) != null) {
 					val = $filter('date')(Date.parse(match[0]), 'shortDate');
+				}
+				// Format nested field values
+				else if (field.indexOf(':') > -1) {
+					var parts = field.split(':');
+					for (var i=0, l=parts.length; i<l; i++) {
+						obj = obj[parts[i]];
+					}
+					val = obj;
 				}
 
 				return val;
