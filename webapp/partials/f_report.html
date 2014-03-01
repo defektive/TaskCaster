@@ -7,6 +7,9 @@
 		</tr>
 	</thead>
 	 <tbody>
+	 	<tr ng-if="data.length == 0">
+			<td colspan="{{ columns.length }}" class="text-center">No Results Found</td>
+	 	</tr>
 	 	<tr ng-repeat="item in data">
 			<td ng-repeat="col in columns">
 				<span ng-switch on="col.valuefield">
